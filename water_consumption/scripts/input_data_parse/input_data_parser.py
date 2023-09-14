@@ -1,5 +1,6 @@
 import csv
 import os
+import numpy as np
 from datetime import datetime
 INPUT_DATA_DIR = "../input_data"
 
@@ -29,9 +30,9 @@ class InputDataParser:
 class WaterConsumption(InputDataParser):
 
 
-    def __init__(self):
+    def __init__(self, data_file):
         super().__init__();
-        super().load_input_data('water_consumption_september_2022.csv')
+        super().load_input_data(data_file)
         self.day_time_format =  "%H:%M"
         self.start_of_night_hour = datetime.strptime('23:59', self.day_time_format)
         self.end_of_night_hour = datetime.strptime('08:00', self.day_time_format)
@@ -77,6 +78,15 @@ class WaterConsumption(InputDataParser):
             result.append(sum([float(el) for el in row[4:-2]]))
 
         return result
+    
+#    def get_total_consumption_by_flat_number(self, flat_number):
+#
+#           for row in self.input_data:
+#                if(row)
+#                result.append(sum([float(el) for el in row[4:-2]]))
+#
+#        return self.input_data[]
+        
 
     def get_all_consumption_matrix(self, include_header = False):
         result = []
@@ -98,7 +108,7 @@ class WaterConsumption(InputDataParser):
         for row in self.input_data:
             if int(row[0]) == flat_number: 
                 result.append([float(el) for el in row[4:-2]])
-                return result
+                return result[0]
             
 
     def get_consumptions_in_block(self, block_code, include_header = False):
@@ -120,6 +130,17 @@ class WaterConsumption(InputDataParser):
 
     def get_all_flats_array(self):
         return [row[0] for row in self.input_data]
+    
+    def get_all_people_array(self):
+        return [int(row[3]) for row in self.input_data]
+    
+    def get_mean_by_people_count_array(self, count):
+        total_consumptions = []
+        for row in self.input_data:
+            if (int(row[3]) == count):
+                total_consumptions.append(sum([float(el) for el in row[4:-2]]))
+
+        return np.mean(total_consumptions)
     
 
 
