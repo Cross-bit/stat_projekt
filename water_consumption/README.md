@@ -183,6 +183,12 @@ Jak je patrné, nejvyšší koncentrace hodnot je v okolí 0, poté četnost pos
 Klesání na první pohled velmi připomína exponencionální rozdělení, pro ověření, že by tomu tak skutečně mohlo být, dává smysl provést další analýzu vzorků.
 
 
+
+[1]: https://www.mdpi.com/2073-4441/10/10/1481#B49-water-10-01481
+
+[2]: https://statproofbook.github.io/P/exp-gam.html
+
+
 ### Q-Q plot analýza
 K této analýze lze použít tzv. Q-Q ploty[[3]], které nám pomohou rozhodnout jaké distribuci jsou data nejvíce podobná. Konkrétně hledáme takový Q-Q plot, kde nanesené hodnoty kvantilů z našich vzorků a hodnoty kvantilů distribuce si budou co nejvíce odpovídat. To se v grafu projeví tak, že většina hodnot se bude nacházet na 45 stupňové referenční přímce(y=x). Naopak pro distribuce zásadně odlišné od té skutečné, budou nanesené hodnoty od přímky divergovat.
 
@@ -246,45 +252,6 @@ Population variance:
 0.0026316775684612245
 Standard deviation:
 0.0513 TODO
-
-
-
-
-
-## Exponenciální rozdělení
-Jak je vidět na histogramu, naměřené vzorky především v nižších hodnotách připomínají klesající exponencielu. Jediný 
-
-Navíc protože mezi 
-
-Naše H_0 hypotéza tedy v tomto případě bude:
-Náhodný výběr má exponenionální rozdělení.
-a jako alternativní hypotézu H_a zvolíme negaci H_0 tedy:
-Náhodný výběr nená exponenciální rozdělení.
-
-Pro test normality_test.py
-
-Otázku, kterou bychom si mohli položit je, proč mají naše data
-zrova toto rozdělení. Exponencionální rozdělení se typicky používá
-pro modelování nezávislých časových událostí, konkrétně pravděpodobnost 
-za jak dlouho nastane nějaký jev.
-
-
-Dále pro "ověření", že můj model není až tak špatně zvolený, v podobných
-studiiích[[1]], např. pro modelování byla použita gamma distribuce.
-Ta by pro modelování dat také mohla být zvolena jak je z Q-Q grafu vidět.
-Nicméně protože je v mém případě Q-Q graf obdobně dobrý(až na diskutované výchylky)
-a protože exponenciální distribuce je pouze specialní[[2]] případ obecnější gamma distribuce, 
-rozhodl jsem se modelovat data takto zjednodušeně.
-
-
-[1]: https://www.mdpi.com/2073-4441/10/10/1481#B49-water-10-01481
-
-[2]: https://statproofbook.github.io/P/exp-gam.html
-
-
-Díky nalezenému modelu se nyní můžeme ptát na otázky typu:
-
-Jaká je pravděpodobnost, že v náhodný den bude spotřeba větší/menší než X
 
 
 ## Linearita počtu lidí v domácnosti a celkové spotřeby
