@@ -9,7 +9,7 @@ matplotlib.use("WebAgg")
 
 
 
-watCons = WaterConsumption('water_consumption_september_2022.csv')
+watCons = WaterConsumption('water_consumption_9_12_2022.csv')
 
 dataA = watCons.get_consumptions_in_block("A")
 dataB = watCons.get_consumptions_in_block("B")
@@ -24,9 +24,30 @@ total_consumptionC = np.sum(dataC, axis=1)
 
 plt.figure(figsize=(8, 6))
 
+values, bins, bars = plt.hist(dataA[0], edgecolor='k', density=True, bins='auto', alpha=0.5)
+plt.title('A')
+
+plt.figure(figsize=(8, 6))
+values, bins, bars = plt.hist(dataB[0], edgecolor='k', density=True, bins='auto', alpha=0.5)
+plt.title('B')
+
+plt.figure(figsize=(8, 6))
+values, bins, bars = plt.hist(dataC[0], edgecolor='k', density=True, bins='auto', alpha=0.5)
+plt.title('C')
+
+plt.figure(figsize=(8, 6))
+#print(dataC)
+
+all_vals = watCons.get_all_consumption_matrix()
+all_vals_flat = np.array(all_vals).flatten()
+
+quantiles, values = stats.probplot(all_vals_flat, dist=stats.norm, plot=plt)
+plt.title("Q-Q Plot for expon entrance Distribution")
+
+
 total_flat_18 = watCons.get_consumption_in_day_flat(24);
 
-
+plt.figure(figsize=(8, 6))
 
 #print(total_flat_18)
 valuesaa, binsaa, barsaa = plt.hist(total_flat_18, edgecolor='k', density=True, bins=10, alpha=0.5)
@@ -64,7 +85,7 @@ for val in all_vals_flat:
         all_vals_flat_no_outliers.append(val);
 
 
-print(rnds)
+#print(rnds)
 statistic, p_value = stats.shapiro(rnds)
 print("p-value: ");
 print(p_value);
@@ -77,7 +98,6 @@ all_mean = np.mean(all_vals_flat_no_outliers)
 lambda_hat = 1/all_mean
 print("mean of all values " + str(all_mean))
 rv = stats.expon(scale=1/lambda_hat)
-
 
 
 
@@ -124,7 +144,7 @@ plt.plot(x, stats.expon.pdf(x, fit_params[0], fit_params[1]), color="green", alp
 
 plt.xlabel('Value')
 plt.ylabel('Frequency')
-plt.title('Histogram of Data')
+plt.title('Histogram of all Data')
 
 plt.figure(figsize=(8, 6))
 

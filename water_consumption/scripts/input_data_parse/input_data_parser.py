@@ -14,7 +14,7 @@ class InputDataParser:
     def load_input_data(self, file_name):
         try:
             script_file_path = os.path.dirname(os.path.realpath(__file__));
-            file_path = os.path.join(script_file_path,INPUT_DATA_DIR, file_name);
+            file_path = os.path.join(script_file_path, INPUT_DATA_DIR, file_name);
 
             with open(file_path, mode='r') as file:
                 reader = csv.reader(file)
