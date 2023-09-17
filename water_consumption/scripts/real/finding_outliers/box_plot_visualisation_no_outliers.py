@@ -58,7 +58,7 @@ for entrance_data in [sums_a, sums_b, sums_c]:
 print(data_result)
 
 # save the table
-with open('../../../assets/html/boxplot_with_outliers_table.html', 'w') as f:
+with open('../../../assets/html/boxplot_no_outliers_table.html', 'w') as f:
     f.write(data_result.to_html())
 
 
