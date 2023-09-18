@@ -22,7 +22,13 @@ all_vals_flat_no_outliers = df.loc[:, "1":"30"].stack()
 # MLE estimator calculation
 
 sample_mean = np.mean(all_vals_flat_no_outliers)
+
 mle = 1 / sample_mean
+
+print("Lambda estimate:")
+print(mle)
+
+
 expon_estimated = stats.expon(scale=1/mle)
 
 plt.figure(figsize=(12, 6))

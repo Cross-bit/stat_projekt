@@ -56,4 +56,21 @@ plt.xlabel('Hodnota')
 plt.ylabel('Četnost')
 plt.title('Histogram chyb')
 print(stats.shapiro(residuals))
+
+
+plt.figure(figsize=(8, 6))
+quantiles, values = stats.probplot(residuals.flatten(), dist=stats.norm, plot=plt)
+plt.title("Q-Q Plot pro normální rozdělení")
+plt.xlabel("Teoretické kvantily")
+plt.ylabel("Kvantily vzorku")
+
+plt.figure(figsize=(8, 6))
+sns.scatterplot(x=y_pred.flatten(), y=residuals.flatten())
+plt.xlabel("Fitted Values")
+plt.ylabel("Residuals")
+plt.title("Residuals vs. Fitted Values Plot")
+
+# Add a horizontal line at y=0 for reference
+plt.axhline(y=0, color='red', linestyle='--')
+
 plt.show()

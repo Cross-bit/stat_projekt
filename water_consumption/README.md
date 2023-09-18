@@ -176,7 +176,7 @@ Po odfiltrování zavádějících dat se můžeme podívat na vzorek jako celek
 ![Obr. histogramu denní spotřeby](./assets/img/daily_consumption_histogram.svg)
 
 
-Jak je patrné, nejvyšší koncentrace hodnot je v okolí 0, poté četnost postupně klesá až na několika vzorů kde spořeba byla za den 1 $m^3$ a více[^1]. 
+Z histogramu je patrné, že nejvyšší koncentrace hodnot je v okolí 0, poté četnost postupně klesá až na několik vzorků kde spořeba byla za den 1 $m^3$ a více[^1]. 
 
 [^1]: Samozřejmě mohli bychom diskutovat i tyto výjimečné hodnoty např. opět pomocí boxplotů. Nicméně vzhledem k nízké četnosti lze usoudit, že spotřeba  mohla být skutečně takto vysoká a tedy je ve v datech necháme.
 
@@ -192,71 +192,82 @@ Klesání na první pohled velmi připomína exponencionální rozdělení, pro 
 ### Q-Q plot analýza
 K této analýze lze použít tzv. Q-Q ploty[[3]], které nám pomohou rozhodnout jaké distribuci jsou data nejvíce podobná. Konkrétně hledáme takový Q-Q plot, kde nanesené hodnoty kvantilů z našich vzorků a hodnoty kvantilů distribuce si budou co nejvíce odpovídat. To se v grafu projeví tak, že většina hodnot se bude nacházet na 45 stupňové referenční přímce(y=x). Naopak pro distribuce zásadně odlišné od té skutečné, budou nanesené hodnoty od přímky divergovat.
 
-![Obr. Q-Q normální rozdělení](./assets/img/daily_consumption_histogram_with_model.svg)
+![Obr. Q-Q normální rozdělení](./assets/img/qq_plots/norm.svg)
 
+Pro normální rozdělení dostáváme Q-Q plot, kde ikdyž se může zdát že křivka v jisté části následuje referenční přímku, tak rozhodně většina bodů leží mimo a navíc koncové body silně divergují.
+Odtud se tedy zdá(resp. ono je to také zjevné z histogramu), že spotřeba vody(minimálně tedy náš vzorek) neodpovídá normálnímu rozdělení.
+
+![Obr. Q-Q uniformní rozdělení](./assets/img/qq_plots/uniform.svg)
+
+Pro úplnost jsem se také rozhodl podívat na Q-Q plot uniformního rozdělení. Zde je situace velice obdobná normálnímu, ikdyž se zdá, že zde je situace o něco lepší, alespoň co se sledování referenční přímky týče. Většina bodů je však také podstatně mimo a tedy i tuto variantu zavrhneme.
+
+![Obr. Q-Q exponencionální rozdělení](./assets/img/qq_plots/expon.svg)
+
+Když se tedy podíváme na rozdělení, které by naše data připomínají vidíme, že většina bodů odpovídá referenční přímce. Ze začátku je situace velice dobrá nicméně pro vyšší hodnoty začínají data od přímky divergovat.
+
+![Obr. Q-Q gamma rozdělení](./assets/img/qq_plots/gamma.svg)
+
+Velice podobnou situaci jako u exponencionálního dostaneme také pro gamma rozdělení.
+
+![Obr. Q-Q poisson rozdělení](./assets/img/qq_plots/poisson.svg)
+
+Pro jistotu ještě prověříme Poissonovo rozdělení, které by (pokud by byl náš vzorek nedostatečný) mohlo naše data také vysvětlovat. Konkrétně bylo použito rozdělení s parametrem $\lambda = S_n$. Z Q-Q plotu je patrné, že naše hodnoty se s referenční přímkou neshodují téměř vůbec a tedy toto rozdělení můžeme zavrhnout.
 
 Kód pro generování je TODO: cesta
 
-![Obr. histogramu denní spotřeby](./assets/img/daily_consumption_histogram_with_model.svg)
-
 ### Komentář k modelu
-Z analýzi výše nám nejlépe vychází Q-Q plot pro exponencionální distribuci. Je dobré si však rozmyslet, zdali tento model skutečně dobře odpovídá našim datům. Exponencionální rozdělení typicky modeluje nezávislé časové intervaly, určující za jak dlouho nastane nějaký jev v budoucnu. 
-Zde se sice nejedná o čas, nicméně při spotřebě vody se jedná o typicky nezávislé 
-že spotřeba v jednotlivých dnech jsou naprosto nezávislé veličiny, tedy že pravděpodobnost budoucí spotřeby nijak nezávisí na spotřebě v předchozím dni. 
-Ikdyž bychom mohli oponovat tím, že lidé se pravidelně myjí, dávají si průměrně stejný počet šálků čaje apod. Nicméně 
+Z analýzi výše nám nejlépe vychází Q-Q plot pro exponencionální distribuci a gamma distribuci. Je dobré si však rozmyslet, zdali tento model skutečně dobře odpovídá našim datům. Exponencionální rozdělení typicky modeluje nezávislé časové intervaly, definující nějaký jev, který nastane v budoucnosti (čas před příchodem dalšího telefonního hovoru do call-centra, čas rozpadu atomu apod.). 
 
+V našem případě se sice nejedná o časové intervaly, ale lze si data vysvětlit v prvé řadě tak, že většina domácností spotřebuje méně vody, protože lidé přes den nejsou doma a tím pozorujeme výraznou četnost hodnot nižší spotřeby. Na drouhou stranu, když lidé doma jsou, tak spotřebují podstateně více, ale tomu býva zase velmi zřídka.
 
-Dále pro "ověření", že můj model není až tak špatně zvolený, v podobných studiiích[1], např. pro modelování byla použita gamma distribuce. Ta by pro modelování dat také mohla být zvolena jak je z Q-Q grafu vidět. Nicméně protože je v mém případě Q-Q graf obdobně dobrý(až na diskutované výchylky) a protože exponenciální distribuce je pouze specialní[2] případ obecnější gamma distribuce, rozhodl jsem se modelovat data takto zjednodušeně.
-
-Když nyní máme stanovenou distribuci, můžeme se začít ptát na důležité otázky např. typu: 
-Jaká je pravděpodobnost, že v libovolný den jednotka spotřebuje nejvýše X m^3 vody apod.
-
-Zajímavé body můžeme vidět níže:
+V druhé řadě, spotřeby domácností v jednotlivých dnech jsou na sobě nezávislé. Protože je exponencionální rozdělení nezávislé, tak i z tohoto pohledu dává dobrý smysl tento model zde aplikovat.
 
 
 
-
-
-
+Dále pro "ověření", že můj model není až tak špatně zvolený, v podobných studiiích[1],pro modelování byla použita právě zmíněná gamma distribuce. Ta by pro modelování dat také mohla být zvolena jak je z Q-Q grafu vidět. Nicméně protože je v mém případě Q-Q graf obdobně dobrý a protože exponenciální distribuce je pouze specialní[2] případ obecnější gamma distribuce, rozhodl jsem se modelovat v tomto experimentu data takto zjednodušeně.
 
 
 [3]: https://www.itl.nist.gov/div898/handbook/eda/section3/qqplot.htm
 
 ### Nalezení parametru modelu metodou ML (maximální věrohodnosti)
 Metodou maximální věrohodnosti můžeme jednoduše zjistit, že dobrým odhadem pro parametr $\hat{\lambda}$ 
-je převrácená hodnota střední hodnoty vzorku, tedy:
-$$\hat{\lambda} = \frac{1}{\bar{X}}$$
+je převrácená hodnota výběrového průměru vzorku $S_n$, tedy
+$$\hat{\lambda} = \frac{1}{S_n}.$$
+
+
+Po dosazení je v našem případě $\hat{\lambda}=5.462$.
 
 [proof](https://www.statlect.com/fundamentals-of-statistics/exponential-distribution-maximum-likelihood)
 
-Jak je vidět na obrázku, funkce 
 
+Teoretickou distribuční funkci nyní můžeme vynést do histogramu dat. Vidíme, že model a data si celkem dobře odpovídají.
 
+![Obr. histogramu denní spotřeby](./assets/img/daily_consumption_histogram_with_model.svg)
 
-### Nalezení confidenčního intervalu meanu $\mu$
+### Aplikace 
+Když nyní máme stanovenou distribuci, můžeme se začít ptát na důležité otázky např. typu: 
+Jaká je pravděpodobnost, že v libovolný den jednotka spotřebuje nejvýše X m^3 vody apod.
+
+Zajímavé body můžeme vidět níže:
+TODO:
+
+## Nalezení konfidenčního intervalu střední hodnoty populace $\mu$
 Dále se můžeme pokusit nalézt konfidenční interval pro střední hodnotu populace $\mu$.
-Z CLT víme, že pokud je vzorek dostatečně velký(podstatně více než 30), tak nám zde odpadá požadavek na normalitu rozdělení. Dále pro určení budeme potřebovat rozptyl populace. Ten sice přesně neznáme, ale známe alespoň rozptyl dat celého roku(ke kterým mám také přístup). Nejedná se tedy o rozptyl celé populace(která je hypoteticky v našem případě nekonečná nebo do konce životnosti měřidel apod.), takže zde jistá míra nepřesnosti stále bude, nicméně jako aproximace v našem případě bude dostačující.
+Z CLT víme, že pokud je vzorek dostatečně velký (např. podstatně více než 30), tak nám zde odpadá požadavek na normalitu rozdělení. Dále pro určení budeme potřebovat rozptyl populace. Ten sice přesně neznáme, ale známe alespoň rozptyl dat celého roku (ke kterým mám přístup). Nejedná se tedy o rozptyl celé populace (která je hypoteticky v našem případě nekonečná nebo do konce životnosti měřidel apod.), takže zde jistá míra nepřesnosti stále bude, nicméně jako aproximace v našem případě bude dostačující.
 
-Zvolme tedy hladinu spolehlivosti $(1-\alpha) = 0.95$. Směrodatná odchylka populace je $\sigma = 0.0513$, velikost vzorku je $n = 630$ $(dny \cdot \#Zaznamu)$, výběrový průměr vzorku $S_n = 0,183$ a pro $\theta = (\mu)$ hledáme konfidenční interval $C_n$ t.ž.: $\lim_{n\to\infty}P(\theta \in C_n ) = 1-\alpha$.
+Zvolme tedy hladinu spolehlivosti $(1-\alpha) = 0.95$. Směrodatná odchylka populace je $\sigma = 0.0513$, velikost vzorku je $n = 630$ $(dny \cdot \#Zaznamu)$, výběrový průměr vzorku $S_n = 0,183$ a pro $\theta = (1/\lambda)$ (protože expon $\mu = 1/\lambda$) hledáme konfidenční interval $C_n$ t.ž.: $\lim_{n\to\infty}P(\theta \in C_n ) = 1-\alpha$.
 
 Pro horní a dolní mez intervalu $C_n$ máme v limitě
 $$S_n \pm z_{\alpha/2} \cdot \frac{\sigma}{\sqrt{n}}.$$
 
-Pro 95 % konfidenční interval($\alpha/2 = 0.025$) je z scozre $z_{\alpha/2}=1.96$.
-Po dosazení tak dostaneme konfidenční interval:
+Pro 95 % konfidenční interval($\alpha/2 = 0.025$) je *z-scozre* $z_{\alpha/2}=1.96$.
+Po dosazení tak dostaneme pro $\mu$ populace konfidenční interval:
 $$C_n = [0.179,0.187]$$
 
 
-
-Population variance:
-0.0026316775684612245
-Standard deviation:
-0.0513 TODO
-
-
 ## Linearita počtu lidí v domácnosti a celkové spotřeby
-Další analýza se bude zabývat závislostí, mezi počtem lid
-Lze očekávat, že s větším počtem lidí v bytě bude lineárně s každžým členem růst i spotřeba této jednotky.
+Další analýza se bude zabývat závislostí, mezi počtem lidí v jednotce a celkové měsíční spotřeby.
+Lze očekávat, že s větším počtem lidí v bytě bude také růst i spotřeba této jednotky. Dále bychom mohli očekávat, že každý člen domácnosti v průměru spotřebuje zhruba stejné množství vody a tedy, že i spotřeba se bude s každým dalším členem lineárně navyšovat.
 
 ![Obr. histogramu denní spotřeby](./assets/img/regression_people_count_vs_consumption.svg)
 
@@ -264,9 +275,21 @@ Dostaneme:
 
 $R$ hodnotu: 0,354 <br>
 $R^2$ hodnotu: 0,125
-Odtud vidíme, že pouze jen okolo 12,5 % hodnot odpovídá našemu modelu. To ale znamená, že ač náznak linerity v datech je, většinu dat nezahrnuje, a proto tento model musíme zavrhnout.
 
-Údaje spolu sice na 35 % korelují (hodnota $R$), ale to také není zrovna mnoho. Z tohoto důvodu linearitu a jakoukoliv korelaci těchto dat, minimálně na našem vzorku, zavrhneme.
+Z grafu vidíme, že spotřeba má skutečně tendenci s vyšším počtem členů růst s 35 % pozitivní korelací vzorků.
+
+Nicméně z hodnoty $R^2$ vidíme, že pouze okolo 12,5 % variace hodnot lze vysvětlit pouze pomocí počtu lidí v domácnosti.
+
+Při pohledu na graf vidíme, že jistá lineání závislost mezi daty je. Zároveň však vidíme, že variace vzorků pro každou skupinu lidí je příliš velká a 
+88 % spotřeby nelze vysvětlit pouze takto jednoduše.
+
+
+Vysvětlení, která tak přicházejí v úvahu jsou, že individuelní spotřeba domácností může vysoce záviset na demografických charakteristikách jednotlivců
+jako je věk, pohlaví, zvyklosti apod. nebo také na tom, kolik procet času jsou rodinní příslušníci skutečně doma. 
+V důsledku toho pozorujeme velkou variaci vzorků spotřeb různých domácností i přesto, že průměrný měsíční počet osob je stejný.
+
+
+
 
 
 
