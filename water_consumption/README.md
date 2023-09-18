@@ -79,8 +79,8 @@ Tab. 1: Statistiky hodnot pro jednotlivé vchody.
 Na obrázku (1) je vidět box plot všech naměřených hodnot rozdělený dle 3 jednotlivých vchodů domu. Vykreslená data byla zpracována využitím python balíčku pandas a seaborn, které pro identifikování outlierů používá metodu Tukey (viz. kód pro výpočet hodnot), konkrétní hodnoty jsou poté uvedeny v tabulce (1).
 
 Z grafu je patrné, že vchody B a C obsahují dva byty, kterým byla naměřená spotřeba výrazně se lyšící od ostatních naměřených dat. To v našem případě použitím metody Tukey znamená:
-$$ x_B = 37,015 > Q3 + IQR \cdot 1.5$$
-$$ x_C = 12,652 > Q3 + IQR \cdot 1.5$$
+$$x_B = 37,015 > Q3 + IQR \cdot 1.5$$
+$$x_C = 12,652 > Q3 + IQR \cdot 1.5$$
 
 Kde $x_B$ je spotřeba outlieru bytu B, $x_C$ spotřeba outlieru bytu C, *Q3* je 3. kvartil hodnot a *IQR* je tzv. *Interquartile range* $IQR = Q3 - Q1$. 
 
@@ -92,7 +92,7 @@ Modrá křivka je měsíční spotřeba bytu č. 12. Červená přímka je prům
 
 Jak je navíc vidět na obrázku výše v první polovině měsíce byla spotřeba vody značně nadprůměrná.
 Můžeme tedy konstatovat, že se nejspíše jednalo o poruchu(např. protékající záchod), která byla 
-16 den odstraněna. Pro naše účely analýzi však tento údaj z dat vyloučíme.
+16. den odstraněna. Pro naše účely analýzi však tento údaj z dat vyloučíme.
 
 Druhý pozorovaný outlier $x_C$ má sice také nadprůměrnou spotřebu, ale na druhou stranu jsou v bytě osoby 3 a spotřeba je na denní bázi převážně konzistentní. Proto jsem se rozhodl tohoto outliera v datech ponechat.
 
