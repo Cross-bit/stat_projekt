@@ -220,11 +220,10 @@ Z analýzi výše nám nejlépe vychází Q-Q plot pro exponencionální distrib
 
 V našem případě se sice nejedná o časové intervaly, ale lze si data vysvětlit v prvé řadě tak, že většina domácností spotřebuje méně vody, protože lidé přes den nejsou doma a tím pozorujeme výraznou četnost hodnot nižší spotřeby. Na drouhou stranu, když lidé doma jsou, tak spotřebují podstateně více, ale tomu býva zase velmi zřídka.
 
-V druhé řadě, spotřeby domácností v jednotlivých dnech jsou na sobě nezávislé. Protože je exponencionální rozdělení nezávislé, tak i z tohoto pohledu dává dobrý smysl tento model zde aplikovat.
+V druhé řadě, spotřeby domácností v jednotlivých dnech jsou na sobě nezávislé. Protože je exponencionální rozdělení nezávislé (a tzv. memoryless), tak i z tohoto pohledu dává dobrý smysl tento model zde zkusit aplikovat.
 
 
-
-Dále pro "ověření", že můj model není až tak špatně zvolený, v podobných studiiích[1],pro modelování byla použita právě zmíněná gamma distribuce. Ta by pro modelování dat také mohla být zvolena jak je z Q-Q grafu vidět. Nicméně protože je v mém případě Q-Q graf obdobně dobrý a protože exponenciální distribuce je pouze specialní[2] případ obecnější gamma distribuce, rozhodl jsem se data modelovat jednodušší distribucí exponencionální.
+Mimoto jako další ověření můžeme nalézt také oporu v podobných studiích[[1]], kde pro modelování byla použita právě zmíněná gamma distribuce. Protože jsou si však oba Q-Q ploty v našem případě velice podobné a protože exponenciální distribuce je pouze specialní[[2]] případ obecnější gamma distribuce, rozhodl jsem se zkusit data modelovat takto zjednodušeně.
 
 
 [3]: https://www.itl.nist.gov/div898/handbook/eda/section3/qqplot.htm
@@ -234,25 +233,37 @@ Metodou maximální věrohodnosti můžeme jednoduše zjistit, že dobrým odhad
 je převrácená hodnota výběrového průměru vzorku $S_n$, tedy
 $$\hat{\lambda} = \frac{1}{S_n}.$$
 
-
 Po dosazení je v našem případě $\hat{\lambda}=5.462$.
 
 [proof](https://www.statlect.com/fundamentals-of-statistics/exponential-distribution-maximum-likelihood)
 
 
-Teoretickou distribuční funkci nyní můžeme vynést do histogramu dat. Vidíme, že model a data si celkem dobře odpovídají.
+Teoretickou pdf nyní můžeme vynést do histogramu dat. Vidíme, že model a data si na první pohled celkem dobře odpovídají.
 
 ![Obr. histogramu denní spotřeby](./assets/img/daily_consumption_histogram_with_model.svg)
 
-### Aplikace 
-Když nyní máme stanovenou distribuci, můžeme se začít ptát na důležité otázky např. typu: 
-Jaká je pravděpodobnost, že v libovolný den jednotka spotřebuje nejvýše X m^3 vody apod.
+Nicméně, abychom měli jistotu, že náš model skutečně dobře koresponduje s daty, měli bychom ověřit platnost 
+i numericky.
 
-Zajímavé body můžeme vidět níže:
-TODO:
+### Testování distribuce
+Pro ověření, že náš model skutečně je nebo není správný použijeme tzv. KS-test (test Kolmogorov-Smirnova).
+
+Vyslovme tedy nulovou a alternativní hypotézu:
+
+$H_0$ – Data odpovídají exponencionálnímu rozdělení.
+
+$H_a$ – Data neodpovídají exponencionálnímu rozdělení.
+
+Zvolme hladinu významnosti $\alpha = 0.05$
+
+KS funkce z knihovny scipy bere na vstupu naše vzorky dat a náhodně generovaný vzorek dat z našeho modelu (kvůli tomu se výsledná hodnota při každém spuštění bude lehce lišit) a vrací p-value.
+Při spuštění byla poslední naměřená hodnota: $p-value = 0.0003314$ což je podstatně méně než $0.05$.
+
+Protože nám p-hodnota vyšla podstatně menší než zvolená hladina významnosti, musíme tím pádem zamítnou $H_0$ a přijmout alternativní hypotézu $H_a$.
+Zjistili jsme tedy, že i přesto, že Q-Q plot a i PDF v histogramu vypadali nadějně, zdá se že naše data nelze vysvětlit exponencionálním rozdělením. Jedním z důvodů by např. mohlo být, že KS test je velice citlivý i na malé odchylky od skutečné distribuce. Jak jsme navíc z Q-Q plotu viděli, tak ač se většina bodů držela relativně blízko referenční přímky, tak na konec nám jistá část začala podstatně divergovat. Je možné, že i právě kvůli tomu KS test takto významně $H_0$ zamítl.
 
 ## Nalezení konfidenčního intervalu střední hodnoty populace $\mu$
-Dále se můžeme pokusit nalézt konfidenční interval pro střední hodnotu populace $\mu$.
+Přesnou distribuci dat tedy sice přesně neznáme, nicméně ale i tak se můžeme pokusit nalézt konfidenční interval pro střední hodnotu populace $\mu$.
 Z CLT víme, že pokud je vzorek dostatečně velký (např. podstatně více než 30), tak nám zde odpadá požadavek na normalitu rozdělení. Dále pro určení budeme potřebovat rozptyl populace. Ten sice přesně neznáme, ale známe alespoň rozptyl dat celého roku (ke kterým mám přístup). Nejedná se tedy o rozptyl celé populace (která je hypoteticky v našem případě nekonečná nebo do konce životnosti měřidel apod.), takže zde jistá míra nepřesnosti stále bude, nicméně jako aproximace v našem případě bude dostačující.
 
 Zvolme tedy hladinu spolehlivosti $(1-\alpha) = 0.95$. Směrodatná odchylka populace je $\sigma = 0.0513$, velikost vzorku je $n = 630$ $(dny \cdot pocetZaznamu)$, výběrový průměr vzorku $S_n = 0,183$ a pro $\theta = (1/\lambda)$ (protože expon $\mu = 1/\lambda$) hledáme konfidenční interval $C_n$ t.ž.: $\lim_{n\to\infty}P(\theta \in C_n ) = 1-\alpha$.
@@ -289,37 +300,9 @@ jako je věk, pohlaví, zvyklosti apod. nebo také na tom, kolik procet času js
 V důsledku toho pozorujeme velkou variaci vzorků spotřeb různých domácností i přesto, že průměrný měsíční počet osob je stejný.
 
 
+## Závěr
 
-
-
-
-# Personův Chi square test(test dobré shody)
-
-V tomto testu rozdělíme data systolického tlaku do 5 kategorií, a to:
-- normal: SYS < 120 **AND** DIA < 80
-- elevated  120 <= SYS < 130 **AND** DIA < 80
-- hypertension stage 1: 130 <= SYS < 140  **OR** 80 DIA < 90
-- hypertension stage 2: 140 <= SYS  **OR** 90 <= DIA
-- hypertension stage 3: 180 < SYS  **AND/OR** 120 < DIA
-
-[Zdroj](https://www.health.harvard.edu/heart-health/reading-the-new-blood-pressure-guidelines)
-
-Jako výchozí frekvence populace budeme uvažovat:
-- normal: 46.2
-- elevated: 17.7
-- hypertension stage 1: 19.1
-- hypertension stage 2: 12.7
-- - hypertension stage 3: 4.4
-
-4.4 46.2 17.7 19.1 12.7
-
-V testu budeme předpokládat, že 
-https://www.ahajournals.org/doi/abs/10.1161/HYPERTENSIONAHA.123.20900
-
-[Zdroj](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8040133/)
-
-
-
+TODO:
 
 
 
