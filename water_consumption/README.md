@@ -81,6 +81,7 @@ Na obrázku (1) je vidět box plot všech naměřených hodnot rozdělený dle 3
 Z grafu je patrné, že vchody B a C obsahují dva byty, kterým byla naměřená spotřeba výrazně se lyšící od ostatních naměřených dat. To v našem případě použitím metody Tukey znamená:
 
 $$x_B = 37,015 > Q3 + IQR \cdot 1.5$$
+
 $$x_C = 12,652 > Q3 + IQR \cdot 1.5$$
 
 Kde $x_B$ je spotřeba outlieru bytu B, $x_C$ spotřeba outlieru bytu C, *Q3* je 3. kvartil hodnot a *IQR* je tzv. *Interquartile range* $IQR = Q3 - Q1$. 
