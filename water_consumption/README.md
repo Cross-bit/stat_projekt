@@ -224,7 +224,7 @@ V druhé řadě, spotřeby domácností v jednotlivých dnech jsou na sobě nez�
 
 
 
-Dále pro "ověření", že můj model není až tak špatně zvolený, v podobných studiiích[1],pro modelování byla použita právě zmíněná gamma distribuce. Ta by pro modelování dat také mohla být zvolena jak je z Q-Q grafu vidět. Nicméně protože je v mém případě Q-Q graf obdobně dobrý a protože exponenciální distribuce je pouze specialní[2] případ obecnější gamma distribuce, rozhodl jsem se modelovat v tomto experimentu data takto zjednodušeně.
+Dále pro "ověření", že můj model není až tak špatně zvolený, v podobných studiiích[1],pro modelování byla použita právě zmíněná gamma distribuce. Ta by pro modelování dat také mohla být zvolena jak je z Q-Q grafu vidět. Nicméně protože je v mém případě Q-Q graf obdobně dobrý a protože exponenciální distribuce je pouze specialní[2] případ obecnější gamma distribuce, rozhodl jsem se data modelovat jednodušší distribucí exponencionální.
 
 
 [3]: https://www.itl.nist.gov/div898/handbook/eda/section3/qqplot.htm
@@ -255,7 +255,7 @@ TODO:
 Dále se můžeme pokusit nalézt konfidenční interval pro střední hodnotu populace $\mu$.
 Z CLT víme, že pokud je vzorek dostatečně velký (např. podstatně více než 30), tak nám zde odpadá požadavek na normalitu rozdělení. Dále pro určení budeme potřebovat rozptyl populace. Ten sice přesně neznáme, ale známe alespoň rozptyl dat celého roku (ke kterým mám přístup). Nejedná se tedy o rozptyl celé populace (která je hypoteticky v našem případě nekonečná nebo do konce životnosti měřidel apod.), takže zde jistá míra nepřesnosti stále bude, nicméně jako aproximace v našem případě bude dostačující.
 
-Zvolme tedy hladinu spolehlivosti $(1-\alpha) = 0.95$. Směrodatná odchylka populace je $\sigma = 0.0513$, velikost vzorku je $n = 630$ $(dny \cdot \#Zaznamu)$, výběrový průměr vzorku $S_n = 0,183$ a pro $\theta = (1/\lambda)$ (protože expon $\mu = 1/\lambda$) hledáme konfidenční interval $C_n$ t.ž.: $\lim_{n\to\infty}P(\theta \in C_n ) = 1-\alpha$.
+Zvolme tedy hladinu spolehlivosti $(1-\alpha) = 0.95$. Směrodatná odchylka populace je $\sigma = 0.0513$, velikost vzorku je $n = 630$ $(dny \cdot pocetZaznamu)$, výběrový průměr vzorku $S_n = 0,183$ a pro $\theta = (1/\lambda)$ (protože expon $\mu = 1/\lambda$) hledáme konfidenční interval $C_n$ t.ž.: $\lim_{n\to\infty}P(\theta \in C_n ) = 1-\alpha$.
 
 Pro horní a dolní mez intervalu $C_n$ máme v limitě
 $$S_n \pm z_{\alpha/2} \cdot \frac{\sigma}{\sqrt{n}}.$$
