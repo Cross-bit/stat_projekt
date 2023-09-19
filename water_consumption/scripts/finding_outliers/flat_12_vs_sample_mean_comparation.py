@@ -17,7 +17,8 @@ df_no_outliers = pd.read_csv('../input_data/water_consumption_september_2022_no_
 all_data_no_outliers = df_no_outliers.loc[:, "1":"30"]
 
 all_data_mean = all_data_no_outliers.mean().mean() #all_data_without_12.mean().mean()
-print(all_data_mean)
+
+print(f"Mean without outliers: {all_data_mean}")
 
 row_12_days = df.set_index('id').loc[12,"1":]
 
