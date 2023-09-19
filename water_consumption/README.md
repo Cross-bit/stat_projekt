@@ -1,4 +1,4 @@
-# Testování spotřeby vody
+# Statistický experment: Spotřeba vody bytového domu
 Pro můj statistický experiment jsem se rozhodl zkoumat data denní spotřeby vody obytného domu
 čítající 31 bytů za září 2022. Zároveň je ke každému záznamu spotřeby uvedeno číslo bytu, 
 průměrný počet osob v daném měsíci a procentuelně vyjádřená plocha bytu vzhledem k celku.
@@ -7,12 +7,12 @@ Data jsou dále logicky členěna do 3 skupin, a to podle 3 oddělených vchodů
 
 Vzhledem k GDPR a zachování anonymity vlastníků jsem zpermutoval čísla bytů(a samozřejmě neuvádím vlastníky/zdroj).
 
-Vešekerá data(ve formátu .csv) stejně tak jako scripty použité k analýze dat jsou k nalezení na [github](https://github.com/Cross-bit/stat_projekt). Zároveň zde pro úplnost přikládám i odkaz na formátovanou tabulku vstupních [naměřených hodnot]()
+Vešekerá data(ve formátu .csv) stejně tak jako scripty použité k analýze dat jsou k nalezení na [github](https://github.com/Cross-bit/stat_projekt). Zároveň zde pro úplnost přikládám i odkaz na formátovanou tabulku vstupních [naměřených hodnot](https://docs.google.com/spreadsheets/d/12dWVfLXAQjDzge4DgbU_YrIZubwF_bhG4dyAgePY6Yw/edit?usp=sharing).
 
 Výstupy budu typicky zaokrouhlovat na 3 desetinná místa. Nicméně je samozřejmé, že knihovny které budu používat budou pracovat s vyšší přesností, čímž může ve výstupech dojít k nepatrnému zkreslení. 
 
 ## Odstranění outliers
-Nejprve je nutné ověřit, zdali se v datech nevyskytují záznamy, které by nemusely mít dostatečnou vypovídající hodnotu o skutečné spotřebě, byly neúplné či zkreslené a mohly by tím 
+Jako první je potřeba ověřit, zdali se v datech nevyskytují záznamy, které by nemusely mít dostatečnou vypovídající hodnotu o skutečné spotřebě, byly neúplné či zkreslené a mohly by tím 
 vnést do výsledných statistik významné chyby.
 
 Pro nalezení těchto zavádějících dat, můžeme využít metody *explorační analýzy*, např. *box ploty*, *scatter ploty* apod.
