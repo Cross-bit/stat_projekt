@@ -12,7 +12,7 @@ Vešekerá data(ve formátu .csv) stejně tak jako scripty použité k analýze 
 Výstupy budu typicky zaokrouhlovat na 3 desetinná místa. Nicméně je samozřejmé, že knihovny které budu používat budou pracovat s vyšší přesností, čímž může ve výstupech dojít k nepatrnému zkreslení. 
 
 ## Odstranění outliers
-Jako první je potřeba prozkoumat, zdali se v datech nevyskytují záznamy, které by nemusely mít dostatečnou vypovídající hodnotu o skutečné spotřebě, byly neúplné či zkreslené a mohly by tím 
+Nejprve je nutné ověřit, zdali se v datech nevyskytují záznamy, které by nemusely mít dostatečnou vypovídající hodnotu o skutečné spotřebě, byly neúplné či zkreslené a mohly by tím 
 vnést do výsledných statistik významné chyby.
 
 Pro nalezení těchto zavádějících dat, můžeme využít metody explorační analýzi jako jsou např. box ploty, scatter ploty apod.
@@ -76,9 +76,10 @@ Tab. 1: Statistiky hodnot pro jednotlivé vchody.
 <br clear="left" />
 
 
-Na obrázku (1) je vidět box plot všech naměřených hodnot rozdělený dle 3 jednotlivých vchodů domu. Vykreslená data byla zpracována využitím python balíčku pandas a seaborn, které pro identifikování outlierů používá metodu Tukey (viz. kód pro výpočet hodnot), konkrétní hodnoty jsou poté uvedeny v tabulce (1).
+Na obrázku (1) je vidět box plot všech naměřených hodnot rozdělený dle 3 jednotlivých vchodů domu. Vykreslená data byla zpracována využitím python balíčku pandas a seaborn.Parametry boxplotu a konkrétní hodnoty jsou poté uvedeny v tabulce (1).
+(Délka whiskerů se může oproti hodnotám z obrázku lišit, protože knihovny nevykreslují whiskery celé, ale zaokrouhlují je na 1. ne-outlier hodnotu z dat.)
 
-Z grafu je patrné, že vchody B a C obsahují dva byty, kterým byla naměřená spotřeba výrazně se lyšící od ostatních naměřených dat. To v našem případě použitím metody Tukey znamená:
+Z grafu je patrné, že vchody B a C obsahují dva byty, kterým byla naměřená spotřeba výrazně se lyšící od ostatních naměřených dat(outliery, vyznačené černými kosočtverci). To v našem případě znamená, že pro tyto hodnoty platí:
 
 $$x_B = 37,015 > Q3 + IQR \cdot 1.5$$
 
@@ -86,15 +87,13 @@ $$x_C = 12,652 > Q3 + IQR \cdot 1.5$$
 
 Kde $x_B$ je spotřeba outlieru bytu B, $x_C$ spotřeba outlieru bytu C, *Q3* je 3. kvartil hodnot a *IQR* je tzv. *Interquartile range* $IQR = Q3 - Q1$. 
 
-Pokud se podíváme na outliery, které jsme získali podrobněji můžeme vidět, že $x_B$, která přísluší bytu 12 je i maximum všech naměřených hodnot vůbec. Zároveň si můžeme všimnout, že spotřeba vody zde byla vysoká 
-především v 1. polovině měsíce. V daném bytě navíc byla v průměru za měsíc pouze jedna osoba. 
+Pokud se podíváme podrobněji na outliery tak můžeme vidět, že $x_B$, která přísluší bytu 12 je i maximum všech naměřených hodnot vůbec. Zároveň si můžeme všimnout, že spotřeba vody zde byla vysoká především v 1. polovině měsíce. V daném bytě navíc byla v průměru za měsíc pouze jedna osoba. 
 
 ![Alt text](./assets/img/flat12_vs_others.svg)
 Modrá křivka je měsíční spotřeba bytu č. 12. Červená přímka je průměr všech bytů kromě b. č. 12
 
-Jak je navíc vidět na obrázku výše v první polovině měsíce byla spotřeba vody značně nadprůměrná.
-Můžeme tedy konstatovat, že se nejspíše jednalo o poruchu(např. protékající záchod), která byla 
-16. den odstraněna. Pro naše účely analýzi však tento údaj z dat vyloučíme.
+Jak je z grafu výše vidět, v první polovině měsíce byla spotřeba vody značně nadprůměrná.
+Můžeme tedy konstatovat, že se nejspíše jednalo o poruchu(např. protékající záchod), která byla 16. den odstraněna. Pro naše účely analýzi však tento údaj z dat vyloučíme.
 
 Druhý pozorovaný outlier $x_C$ má sice také nadprůměrnou spotřebu, ale na druhou stranu jsou v bytě osoby 3 a spotřeba je na denní bázi převážně konzistentní. Proto jsem se rozhodl tohoto outliera v datech ponechat.
 
@@ -102,17 +101,17 @@ Byt 19 ve vchodu B je v box-plotu uveden jako maximum (a ne jako outlier) nicmé
 
 <hr>
 
-Dále jsem se z dat rozhodl vypustit záznamy, kde byla spotřeba během měsíce nulová, nebo téměř nulová. Jistě se jedná o byty ve kterých byl uvedený počet osob 0. 
+Dále, pro lepší výpovědní hodnotu z dat vypustíme záznamy, kde byla spotřeba během měsíce nulová, nebo téměř nulová. Jistě se jedná o byty ve kterých byl uvedený počet osob 0. 
 U bytu 29 sice můžeme vidět drobnou spotřebu 21. den, nicméně tato hodnota je oproti průměrné spotřebě zanedbatelná. Může se tak jedant o chybu měření či např. lehce propouštějící uzávěr apod.
 
-Byty 13, 14 sice mají uvedený počet obyvatel, ale spotřeba je přes všechny dny také nulová/zanedbatelná. Zde se jako rozumné vysvětlení jeví to, že lidé při záznamu počtu obyvatel(které se navíc koná až na konci roku) použili hodnoty, o kterých se domnívali, že jsou správná. Tedy tyto řádky také raději vynecháme.
+Byty 13, 14 sice mají uvedený počet obyvatel, ale spotřeba je přes všechny dny také nulová/zanedbatelná. Zde se jako rozumné vysvětlení jeví to, že lidé při záznamu počtu osob (které se navíc koná až na konci roku) hodnotu jen odhadovali. Mohli si tak napsat nenulový počet osob, i přesto, že spotřeba byla 0 a tedy tyto řádky také raději vynecháme.
 
 Stejně tak dává smysl vypustit byt č. 6, kde ač v celkovém součtu je spotřeba v porovnání s ostatními byty možná, tak většina hodnot je nulová a všechna spotřeba je pak koncentrovaná v několika málo dnech. 
-To může opět svědčit o chybě měření a tedy tento záznam také vypustíme.
+To může opět svědčit o chybě měření a tedy tento záznam také vyloučíme.
 
 <hr>
 
-Po odstranění všech outlierů nyní dostaneme Box plot na obrázku (4). Můžeme si také všimnout, že střední hodnoty spotřeb jednolivých vchodů (černé křížky) jsou mnohem blíže u sebe než tomu bylo v prvním případě. To nasvědčuje tomu, že data jsou nyní(minimálně napříč vchody) více konzistentní a v další analýze k nim můžeme přistupovat jednotně, s vyšší mírou důvěry.
+Po odstranění všech outlierů nyní dostaneme *box plot* na obrázku (4). Můžeme si také všimnout, že střední hodnoty spotřeb jednolivých vchodů (černé křížky) jsou mnohem blíže u sebe než tomu bylo v prvním případě. To nasvědčuje tomu, že data jsou nyní (minimálně napříč vchody) více konzistentní a v další analýze k nim můžeme přistupovat jednotně, s vyšší mírou důvěry.
 
 ![Obr. boxplotů bez outlierů](./assets/img/boxplot_no_outliers.svg)
 
@@ -180,9 +179,9 @@ Po odfiltrování zavádějících dat se můžeme podívat na vzorek jako celek
 
 Z histogramu je patrné, že nejvyšší koncentrace hodnot je v okolí 0, poté četnost postupně klesá až na několik vzorků kde spořeba byla za den 1 $m^3$ a více[^1]. 
 
-[^1]: Samozřejmě mohli bychom diskutovat i tyto výjimečné hodnoty např. opět pomocí boxplotů. Nicméně vzhledem k nízké četnosti lze usoudit, že spotřeba  mohla být skutečně takto vysoká a tedy je ve v datech necháme.
+[^1]: Samozřejmě mohli bychom diskutovat i tyto výjimečné hodnoty např. opět pomocí boxplotů. Nicméně vzhledem k nízké četnosti lze usoudit, že spotřeba  mohla být skutečně takto vysoká a tedy je v datech necháme.
 
-Klesání na první pohled velmi připomína exponencionální rozdělení, pro ověření, že by tomu tak skutečně mohlo být, dává smysl provést další analýzu vzorků.
+Klesání na první pohled velmi připomína exponencionální rozdělení. Pro ověření, že by tomu tak skutečně mohlo být, dává smysl provést další analýzu vzorků.
 
 
 
@@ -197,15 +196,16 @@ K této analýze lze použít tzv. Q-Q ploty[[3]], které nám pomohou rozhodnou
 ![Obr. Q-Q normální rozdělení](./assets/img/qq_plots/norm.svg)
 
 Pro normální rozdělení dostáváme Q-Q plot, kde ikdyž se může zdát že křivka v jisté části následuje referenční přímku, tak rozhodně většina bodů leží mimo a navíc koncové body silně divergují.
-Odtud se tedy zdá(resp. ono je to také zjevné z histogramu), že spotřeba vody(minimálně tedy náš vzorek) neodpovídá normálnímu rozdělení.
+Odtud se tedy zdá, že spotřeba vody(minimálně tedy náš vzorek) není normálně rozdělena.
 
 ![Obr. Q-Q uniformní rozdělení](./assets/img/qq_plots/uniform.svg)
 
-Pro úplnost jsem se také rozhodl podívat na Q-Q plot uniformního rozdělení. Zde je situace velice obdobná normálnímu, ikdyž se zdá, že zde je situace o něco lepší, alespoň co se sledování referenční přímky týče. Většina bodů je však také podstatně mimo a tedy i tuto variantu zavrhneme.
+Pro úplnost jsem se také rozhodl podívat na Q-Q plot uniformního rozdělení. Zde je situace velice obdobná rozdělení normálnímu. Může se zdá, že je zde situace o něco lepší, alespoň co se sledování referenční přímky týče. Většina bodů je však také podstatně mimo a tedy i tuto variantu zavrhneme.
 
 ![Obr. Q-Q exponencionální rozdělení](./assets/img/qq_plots/expon.svg)
 
-Když se tedy podíváme na rozdělení, které by naše data připomínají vidíme, že většina bodů odpovídá referenční přímce. Ze začátku je situace velice dobrá nicméně pro vyšší hodnoty začínají data od přímky divergovat.
+Když se podíváme na rozdělení, která již více odpovídají našim datům vidíme, že zde pro exponencionální případ většina bodů téměř odpovídá referenční přímce. Ze začátku je situace velice dobrá nicméně pro vyšší hodnoty začínají data od přímky divergovat.
+Minimálně tedy část hodnot toto rozdělení má.
 
 ![Obr. Q-Q gamma rozdělení](./assets/img/qq_plots/gamma.svg)
 
@@ -213,7 +213,7 @@ Velice podobnou situaci jako u exponencionálního dostaneme také pro gamma roz
 
 ![Obr. Q-Q poisson rozdělení](./assets/img/qq_plots/poisson.svg)
 
-Pro jistotu ještě prověříme Poissonovo rozdělení, které by (pokud by byl náš vzorek nedostatečný) mohlo naše data také vysvětlovat. Konkrétně bylo použito rozdělení s parametrem $\lambda = S_n$. Z Q-Q plotu je patrné, že naše hodnoty se s referenční přímkou neshodují téměř vůbec a tedy toto rozdělení můžeme zavrhnout.
+Pro jistotu ještě prověříme Poissonovo rozdělení, které by (pokud by byl náš vzorek nedostatečný) mohlo naše data také vysvětlovat. Konkrétně bylo použito rozdělení s parametrem $\lambda = S_n$. Z Q-Q plotu je patrné, že naše hodnoty se s referenční přímkou neshodují téměř vůbec a tedy toto rozdělení můžeme vyloučit.
 
 Kód pro generování je TODO: cesta
 
@@ -240,7 +240,7 @@ Po dosazení je v našem případě $\hat{\lambda}=5.462$.
 [proof](https://www.statlect.com/fundamentals-of-statistics/exponential-distribution-maximum-likelihood)
 
 
-Teoretickou pdf nyní můžeme vynést do histogramu dat. Vidíme, že model a data si na první pohled celkem dobře odpovídají.
+Teoretickou PDF nyní můžeme vynést do histogramu dat. Vidíme, že model a data si na první pohled celkem dobře odpovídají.
 
 ![Obr. histogramu denní spotřeby](./assets/img/daily_consumption_histogram_with_model.svg)
 
@@ -265,7 +265,7 @@ Protože nám p-hodnota vyšla podstatně menší než zvolená hladina významn
 Zjistili jsme tedy, že i přesto, že Q-Q plot a i PDF v histogramu vypadali nadějně, zdá se že naše data nelze vysvětlit exponencionálním rozdělením. Jedním z důvodů by např. mohlo být, že KS test je velice citlivý i na malé odchylky od skutečné distribuce. Jak jsme navíc z Q-Q plotu viděli, tak ač se většina bodů držela relativně blízko referenční přímky, tak na konec nám jistá část začala podstatně divergovat. Je možné, že i právě kvůli tomu KS test takto významně $H_0$ zamítl.
 
 ## Nalezení konfidenčního intervalu střední hodnoty populace $\mu$
-Přesnou distribuci dat tedy sice přesně neznáme, nicméně ale i tak se můžeme pokusit nalézt konfidenční interval pro střední hodnotu populace $\mu$.
+Přesnou distribuci dat tedy sice neznáme, nicméně ale i tak se můžeme pokusit nalézt konfidenční interval pro střední hodnotu populace $\mu$.
 Z CLT víme, že pokud je vzorek dostatečně velký (např. podstatně více než 30), tak nám zde odpadá požadavek na normalitu rozdělení. Dále pro určení budeme potřebovat rozptyl populace. Ten sice přesně neznáme, ale známe alespoň rozptyl dat celého roku (ke kterým mám přístup). Nejedná se tedy o rozptyl celé populace (která je hypoteticky v našem případě nekonečná nebo do konce životnosti měřidel apod.), takže zde jistá míra nepřesnosti stále bude, nicméně jako aproximace v našem případě bude dostačující.
 
 Zvolme tedy hladinu spolehlivosti $(1-\alpha) = 0.95$. Směrodatná odchylka populace je $\sigma = 0.0513$, velikost vzorku je $n = 630$ $(dny \cdot pocetZaznamu)$, výběrový průměr vzorku $S_n = 0,183$ a pro $\theta = (1/\lambda)$ (protože expon $\mu = 1/\lambda$) hledáme konfidenční interval $C_n$ t.ž.: $\lim_{n\to\infty}P(\theta \in C_n ) = 1-\alpha$.
@@ -289,12 +289,12 @@ Dostaneme:
 $R$ hodnotu: 0,354 <br>
 $R^2$ hodnotu: 0,125
 
-Z grafu vidíme, že spotřeba má skutečně tendenci s vyšším počtem členů růst s 35 % pozitivní korelací vzorků.
+Z grafu vidíme, že spotřeba má skutečně tendenci s vyšším počtem členů růst s 35,4 % pozitivní korelací vzorků.
 
 Nicméně z hodnoty $R^2$ vidíme, že pouze okolo 12,5 % variace hodnot lze vysvětlit pouze pomocí počtu lidí v domácnosti.
 
 Při pohledu na graf vidíme, že jistá lineání závislost mezi daty je. Zároveň však vidíme, že variace vzorků pro každou skupinu lidí je příliš velká a 
-88 % spotřeby nelze vysvětlit pouze takto jednoduše.
+data nám říkají, že 88 % spotřeby nelze vysvětlit pouze takto jednoduše.
 
 
 Vysvětlení, která tak přicházejí v úvahu jsou, že individuelní spotřeba domácností může vysoce záviset na demografických charakteristikách jednotlivců
@@ -303,8 +303,20 @@ V důsledku toho pozorujeme velkou variaci vzorků spotřeb různých domácnost
 
 
 ## Závěr
+Výsledkem tohoto statistického experimentu tedy je, že ač se na první pohled mohlo zdát, že exponencionální distribuce bude dobře vysvětlovat měsíční spotřebu, nepodařilo se nám tuto hypotézu potvrdit. Nicméně i bez znalosti přesné distribuce jsme byli v datech schopni statistickými metodami identifikovat neúplná a zkreslující data, nalézt vhodné statistiky a také např. nalézt 95 % konfidenční interval střední hodnoty populace. 
+Překvapivím zjištěním poté bylo, že počet osob v bytě nemusí mít zas až tak zásadní vliv na celkovou spotřebu domácnosti.
 
-TODO:
+Pro další zkoumání by bylo vhodné prověřit i další statistické modely, např. zmíněnou gamma distribuci a pro přesnější závěry o celkové populaci provést analýzu i na intra měsíční úrovni spotřeb. 
+
+Závěrečným shrnutím myslím, že se podařilo poukázat na některé zajímavé charakteristiky dat spotřeby vody v bytových jednotkách nicméně pro přesnější výsledky je nutné provést další analýzu.
+
+
+
+
+
+
+
+
 
 
 
