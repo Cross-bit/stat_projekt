@@ -72,6 +72,7 @@ obr. 1: Box plot celkové spotřeby vody jednotlivých vchodů, hotnoty jsou vyz
     </tr>
   </tbody>
 </table>
+
 Tab. 1: Statistiky hodnot pro jednotlivé vchody včetně outlierů
 
 <br/>
@@ -169,12 +170,14 @@ Obr. 3: Box plot hodnot pro jednotlivé vchody po odstranění outlierů a nulov
     </tr>
   </tbody>
 </table>
+
 Tab. 2: Statistiky hodnot pro jednotlivé vchody po odstranění outlierů a nulových hodnot
 
 ## Nalezení vhodného modelu
 Po odfiltrování zavádějících dat se můžeme podívat na vzorek jako celek a pokusit se nalézt vhodný model, který by naše data dobře popisoval. Pro začátek můžeme vynést všechny naměřené denní hodnoty do *histogramu*.
 
 ![Obr. histogramu denní spotřeby](./assets/img/daily_consumption_histogram.svg)
+
 Obr. 4: Histogram denní spotřeby za měsíc září
 
 Z histogramu (4) je patrné, že nejvyšší koncentrace hodnot je v okolí 0, poté četnost postupně klesá až na několik vzorků kde spořeba byla za den 1 $m^3$ a více[^1]. 
