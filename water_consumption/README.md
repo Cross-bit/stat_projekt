@@ -15,7 +15,7 @@ Výstupy budu typicky zaokrouhlovat na 3 desetinná místa. Nicméně je samozř
 Nejprve je nutné ověřit, zdali se v datech nevyskytují záznamy, které by nemusely mít dostatečnou vypovídající hodnotu o skutečné spotřebě, byly neúplné či zkreslené a mohly by tím 
 vnést do výsledných statistik významné chyby.
 
-Pro nalezení těchto zavádějících dat, můžeme využít metody explorační analýzi jako jsou např. box ploty, scatter ploty apod.
+Pro nalezení těchto zavádějících dat, můžeme využít metody explorační analýzy jako jsou např. box ploty, scatter ploty apod.
 
 ### Box plot analýza dat
 ![Alt text](./assets/img/boxplot_with_outliers.svg)
@@ -79,7 +79,7 @@ Tab. 1: Statistiky hodnot pro jednotlivé vchody.
 Na obrázku (1) je vidět box plot všech naměřených hodnot rozdělený dle 3 jednotlivých vchodů domu. Vykreslená data byla zpracována využitím python balíčku pandas a seaborn.Parametry boxplotu a konkrétní hodnoty jsou poté uvedeny v tabulce (1).
 (Délka whiskerů se může oproti hodnotám z obrázku lišit, protože knihovny nevykreslují whiskery celé, ale zaokrouhlují je na 1. ne-outlier hodnotu z dat.)
 
-Z grafu je patrné, že vchody B a C obsahují dva byty, kterým byla naměřená spotřeba výrazně se lyšící od ostatních naměřených dat(outliery, vyznačené černými kosočtverci). To v našem případě znamená, že pro tyto hodnoty platí:
+Z grafu je patrné, že vchody B a C obsahují dva byty, kterým byla naměřená spotřeba výrazně se lišící od ostatních naměřených dat(outliery, vyznačené černými kosočtverci). To v našem případě znamená, že pro tyto hodnoty platí:
 
 $$x_B = 37,015 > Q3 + IQR \cdot 1.5$$
 
@@ -93,7 +93,7 @@ Pokud se podíváme podrobněji na outliery tak můžeme vidět, že $x_B$, kter
 Modrá křivka je měsíční spotřeba bytu č. 12. Červená přímka je průměr všech bytů kromě b. č. 12
 
 Jak je z grafu výše vidět, v první polovině měsíce byla spotřeba vody značně nadprůměrná.
-Můžeme tedy konstatovat, že se nejspíše jednalo o poruchu(např. protékající záchod), která byla 16. den odstraněna. Pro naše účely analýzi však tento údaj z dat vyloučíme.
+Můžeme tedy konstatovat, že se nejspíše jednalo o poruchu(např. protékající záchod), která byla 16. den odstraněna. Pro naše účely analýzy však tento údaj z dat vyloučíme.
 
 Druhý pozorovaný outlier $x_C$ má sice také nadprůměrnou spotřebu, ale na druhou stranu jsou v bytě osoby 3 a spotřeba je na denní bázi převážně konzistentní. Proto jsem se rozhodl tohoto outliera v datech ponechat.
 
@@ -200,7 +200,7 @@ Odtud se tedy zdá, že spotřeba vody(minimálně tedy náš vzorek) není norm
 
 ![Obr. Q-Q uniformní rozdělení](./assets/img/qq_plots/uniform.svg)
 
-Pro úplnost jsem se také rozhodl podívat na Q-Q plot uniformního rozdělení. Zde je situace velice obdobná rozdělení normálnímu. Může se zdá, že je zde situace o něco lepší, alespoň co se sledování referenční přímky týče. Většina bodů je však také podstatně mimo a tedy i tuto variantu zavrhneme.
+Pro úplnost jsem se také rozhodl podívat na Q-Q plot uniformního rozdělení. Zde je situace velice obdobná rozdělení normálnímu. Může se zdát, že je zde situace o něco lepší, alespoň co se sledování referenční přímky týče. Většina bodů je však také podstatně mimo a tedy i tuto variantu zavrhneme.
 
 ![Obr. Q-Q exponencionální rozdělení](./assets/img/qq_plots/expon.svg)
 
@@ -218,7 +218,7 @@ Pro jistotu ještě prověříme Poissonovo rozdělení, které by (pokud by byl
 Kód pro generování je TODO: cesta
 
 ### Komentář k modelu
-Z analýzi výše nám nejlépe vychází Q-Q plot pro exponencionální distribuci a gamma distribuci. Je dobré si však rozmyslet, zdali tento model skutečně dobře odpovídá našim datům. Exponencionální rozdělení typicky modeluje nezávislé časové intervaly, definující nějaký jev, který nastane v budoucnosti (čas před příchodem dalšího telefonního hovoru do call-centra, čas rozpadu atomu apod.). 
+Z analýzy výše nám nejlépe vychází Q-Q plot pro exponencionální distribuci a gamma distribuci. Je dobré si však rozmyslet, zdali tento model skutečně dobře odpovídá našim datům. Exponencionální rozdělení typicky modeluje nezávislé časové intervaly, definující nějaký jev, který nastane v budoucnosti (čas před příchodem dalšího telefonního hovoru do call-centra, čas rozpadu atomu apod.). 
 
 V našem případě se sice nejedná o časové intervaly, ale lze si data vysvětlit v prvé řadě tak, že většina domácností spotřebuje méně vody, protože lidé přes den nejsou doma a tím pozorujeme výraznou četnost hodnot nižší spotřeby. Na drouhou stranu, když lidé doma jsou, tak spotřebují podstateně více, ale tomu býva zase velmi zřídka.
 
@@ -281,6 +281,7 @@ $$C_n = [0.179,0.187]$$
 ## Linearita počtu lidí v domácnosti a celkové spotřeby
 Další analýza se bude zabývat závislostí, mezi počtem lidí v jednotce a celkové měsíční spotřeby.
 Lze očekávat, že s větším počtem lidí v bytě bude také růst i spotřeba této jednotky. Dále bychom mohli očekávat, že každý člen domácnosti v průměru spotřebuje zhruba stejné množství vody a tedy, že i spotřeba se bude s každým dalším členem lineárně navyšovat.
+K ověření použijeme metodu lineární regrese.
 
 ![Obr. histogramu denní spotřeby](./assets/img/regression_people_count_vs_consumption.svg)
 
@@ -308,7 +309,7 @@ Překvapivím zjištěním poté bylo, že počet osob v bytě nemusí mít zas 
 
 Pro další zkoumání by bylo vhodné prověřit i další statistické modely, např. zmíněnou gamma distribuci a pro přesnější závěry o celkové populaci provést analýzu i na intra měsíční úrovni spotřeb. 
 
-Závěrečným shrnutím myslím, že se podařilo poukázat na některé zajímavé charakteristiky dat spotřeby vody v bytových jednotkách nicméně pro přesnější výsledky je nutné provést další analýzu.
+V závěru myslím, že se podařilo poukázat na některé zajímavé charakteristiky dat spotřeby vody v bytových jednotkách nicméně pro přesnější výsledky dává smysl provést ještě další detailnější analýzu.
 
 
 
