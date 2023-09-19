@@ -1,7 +1,4 @@
 #!/bin/python3
-import sys
-sys.path.append("/home/krizondr/school/past/stat_projekt/water_consumption/scripts")
-from input_data_parse.input_data_parser import WaterConsumption
 from scipy import stats
 import numpy as np
 import pandas as pd
@@ -12,9 +9,7 @@ import seaborn as sns
 # NOTE: Using webAgg here, need to set DISPLAY=:0 and the underlying render api as needed !!!!
 matplotlib.use("WebAgg")
 
-watCons = WaterConsumption('water_consumption_september_2022.csv')
-
-df = pd.read_csv('../../input_data/water_consumption_september_2022.csv', decimal=",")
+df = pd.read_csv('../../input_data/water_consumption_september_2022_no_outliers.csv', decimal=",")
 
 # we sum values in the rows (of each flat)
 summed_rows = df.loc[: , "1":"30"].sum(axis=1)
@@ -59,7 +54,7 @@ for entrance_data in [sums_a, sums_b, sums_c]:
 print(data_result)
 
 # save the table
-with open('../../../assets/html/boxplot_with_outliers_table.html', 'w') as f:
+with open('../../assets/html/boxplot_with_outliers_table.html', 'w') as f:
     f.write(data_result.to_html())
 
 
@@ -81,7 +76,3 @@ plt.xlabel("Jednotlivé vchody")
 plt.title('Box plot celkové spotřeby bytů dle jednotlivých vchodů', fontsize=15, pad=10)
 
 plt.show()
-
-
-
-

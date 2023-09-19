@@ -87,9 +87,9 @@ $$x_B = 37,015 > Q3 + IQR \cdot 1.5$$
 
 $$x_C = 12,652 > Q3 + IQR \cdot 1.5$$
 
-Kde $x_B$ je spotřeba outlieru bytu B, $x_C$ spotřeba outlieru bytu C, *Q3* je *3. kvartil *hodnot a *IQR* je tzv. *Interquartile range* $IQR = Q3 - Q1$. 
+Kde $x_B$ je spotřeba outlieru bytu B, $x_C$ spotřeba outlieru bytu C, *Q3* je *3. kvartil* hodnot a *IQR* je tzv. *Interquartile range* $IQR = Q3 - Q1$. 
 
-Pokud se podíváme podrobněji na outliery tak můžeme vidět, že $x_B$, která přísluší bytu 12 je i maximum všech naměřených hodnot vůbec. Zároveň si můžeme všimnout, že spotřeba vody zde byla vysoká především v 1. polovině měsíce. V daném bytě navíc byla v průměru za měsíc pouze jedna osoba. 
+Pokud se podíváme podrobněji na *outliery* tak můžeme vidět, že $x_B$, která přísluší bytu 12 je i maximum všech naměřených hodnot vůbec. Zároveň si můžeme všimnout, že spotřeba vody zde byla vysoká především v 1. polovině měsíce. V daném bytě navíc byla v průměru za měsíc pouze jedna osoba. 
 
 ![Alt text](./assets/img/flat12_vs_others.svg)
 Obr. 2: Modrá křivka je měsíční spotřeba bytu č. 12. Červená přímka je průměr všech bytů po odstranění outlierů
@@ -173,6 +173,8 @@ Obr. 3: Box plot hodnot pro jednotlivé vchody po odstranění outlierů a nulov
 
 Tab. 2: Statistiky hodnot pro jednotlivé vchody po odstranění outlierů a nulových hodnot
 
+**Scripty použité k analýze hodnot jsou k nalezení pod: /scripts/finding_outliers**
+
 ## Nalezení vhodného modelu
 Po odfiltrování zavádějících dat se můžeme podívat na vzorek jako celek a pokusit se nalézt vhodný model, který by naše data dobře popisoval. Pro začátek můžeme vynést všechny naměřené denní hodnoty do *histogramu*.
 
@@ -230,11 +232,11 @@ V našem případě se sice nejedná o časové intervaly, ale lze si data vysv�
 V druhé řadě, spotřeby domácností v jednotlivých dnech jsou na sobě nezávislé. Protože je exponencionální rozdělení nezávislé (a tzv. memoryless), tak i z tohoto pohledu dává dobrý smysl tento model zde zkusit aplikovat.
 
 
-Mimoto jako další ověření můžeme nalézt také oporu v podobných studiích [[2]], kde pro modelování byla použita právě zmíněná gamma distribuce. Protože jsou si však oba *Q-Q ploty* v našem případě velice podobné a protože *exponenciální distribuce* je pouze specialní [[3]] případ obecnější *gamma distribuce*, rozhodl jsem se zkusit data modelovat takto zjednodušeně.
+Mimoto jako další ověření můžeme nalézt také oporu v podobných studiích[[2]], kde pro modelování byla použita právě zmíněná gamma distribuce. Protože jsou si však oba *Q-Q ploty* v našem případě velice podobné a protože *exponenciální distribuce* je pouze specialní[[3]] případ obecnější *gamma distribuce*, rozhodl jsem se zkusit data modelovat takto zjednodušeně.
 
 ### Nalezení parametru modelu metodou ML (maximální věrohodnosti)
 Metodou *maximální věrohodnosti* můžeme jednoduše zjistit, že dobrým odhadem pro parametr $\hat{\lambda}$ 
-je převrácená hodnota *výběrového průměru* [[4]] vzorku $S_n$, tedy
+je převrácená hodnota *výběrového průměru*[[4]] vzorku $S_n$, tedy
 $$\hat{\lambda} = \frac{1}{S_n}.$$
 
 Po dosazení je v našem případě $\hat{\lambda}=5.462$.
@@ -265,6 +267,8 @@ Při spuštění byla poslední naměřená hodnota: $p-value = 0.0003314$ což 
 Protože nám *p-hodnota* vyšla podstatně menší než zvolená hladina významnosti, musíme tím pádem zamítnou $H_0$ a přijmout alternativní hypotézu $H_a$.
 Zjistili jsme tedy, že i přesto, že *Q-Q plot* a i PDF v *histogramu* vypadali nadějně, zdá se že naše data nelze vysvětlit *exponencionálním rozdělením*. Jedním z důvodů by např. mohlo být, že *KS test* je velice citlivý i na malé odchylky od skutečné distribuce. Jak jsme navíc z *Q-Q plotu* viděli, tak ač se většina bodů držela relativně blízko referenční přímky, tak na konec nám jistá část začala podstatně *divergovat*. Je možné, že i právě kvůli tomu *KS test* takto významně $H_0$ zamítl.
 
+**Scripty použité k analýze hodnot jsou k nalezení pod: /scripts/parametric_model**
+
 ## Nalezení konfidenčního intervalu střední hodnoty populace $\mu$
 Přesnou distribuci dat tedy sice neznáme, nicméně ale i tak se můžeme pokusit nalézt *konfidenční interval* pro střední hodnotu populace $\mu$.
 Z *CLT*[^2] víme, že pokud je vzorek dostatečně velký (např. podstatně více než 30), tak nám zde odpadá požadavek na *normalitu rozdělení*. Dále pro určení budeme potřebovat *rozptyl* populace. Ten sice přesně neznáme, ale známe alespoň *rozptyl* dat celého roku (ke kterým mám přístup). Nejedná se tedy o *rozptyl* celé populace (která je hypoteticky v našem případě nekonečná nebo do konce životnosti měřidel apod.), takže zde jistá míra nepřesnosti stále bude, nicméně jako aproximace v našem případě bude dostačující.
@@ -278,6 +282,7 @@ Pro *95 % konfidenční interval* ($\alpha/2 = 0.025$) je *z-scozre* $z_{\alpha/
 Po dosazení tak dostaneme pro $\mu$ populace *konfidenční interval*:
 $$C_n = [0.179,0.187]$$
 
+**Scripty použité k analýze hodnot jsou k nalezení pod: /scripts/confidential_interval**
 
 ## Linearita počtu lidí v domácnosti a celkové spotřeby
 Další analýza se bude zabývat závislostí, mezi počtem lidí v jednotce a celkové měsíční spotřeby.
@@ -305,6 +310,7 @@ Vysvětlení, která tak přicházejí v úvahu jsou, že individuelní spotřeb
 jako je věk, pohlaví, zvyklosti apod. nebo také na tom, kolik procet času jsou rodinní příslušníci skutečně doma. 
 V důsledku toho pozorujeme velkou variaci vzorků spotřeb různých domácností i přesto, že průměrný měsíční počet osob je stejný.
 
+**Scripty použité k analýze hodnot jsou k nalezení pod: /scripts/linear_regression**
 
 ## Závěr
 Výsledkem tohoto statistického experimentu tedy je, že ač se na první pohled mohlo zdát, že *exponencionální distribuce* bude dobře vysvětlovat měsíční spotřebu, nepodařilo se nám tuto hypotézu potvrdit. Nicméně i bez znalosti přesné distribuce jsme byli v datech schopni statistickými metodami identifikovat neúplná a zkreslující data, nalézt vhodné statistiky a také nalézt *95 % konfidenční interval* střední hodnoty populace. 

@@ -1,7 +1,4 @@
 #!/bin/python3
-import sys
-sys.path.append("/home/krizondr/school/past/stat_projekt/water_consumption/scripts")
-from input_data_parse.input_data_parser import WaterConsumption
 from scipy import stats
 import numpy as np
 import pandas as pd
@@ -12,7 +9,7 @@ import seaborn as sns
 # NOTE: Using webAgg here, need to set DISPLAY=:0 and the underlying render api as needed !!!!
 matplotlib.use("WebAgg")
 
-df = pd.read_csv('../../input_data/water_consumption_september_2022.csv', decimal=",")
+df = pd.read_csv('../input_data/water_consumption_september_2022.csv', decimal=",")
 
 all_data_without_12 = df.set_index('id').drop(12).loc[:, "1":"30"]
 

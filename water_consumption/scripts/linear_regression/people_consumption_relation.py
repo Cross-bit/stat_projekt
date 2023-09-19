@@ -14,14 +14,12 @@ import matplotlib.pyplot as plt
 
 matplotlib.use("WebAgg")
 
-
 df = pd.read_csv('../../input_data/water_consumption_september_2022_no_outliers.csv', decimal=",")
 
 # this is the X (independent)
 people_count = df['#osob'].values.reshape(-1, 1)
 # this is the Y (dependent)
 total_water_consumption = df.loc[:, "1":"30"].sum(axis=1).values.reshape(-1, 1)
-
 
 model = LinearRegression()
 model.fit(people_count, total_water_consumption)
@@ -44,8 +42,6 @@ plt.plot(people_count, y_pred, color='red', label='Regresní přímka')
 plt.xlabel('Počet lidí v jednotce')
 plt.ylabel('Celková spotřeba vody jednotky')
 plt.legend()
-
-
 
 
 plt.figure(figsize=(12, 6))

@@ -1,13 +1,14 @@
 #!/bin/python3
 import sys
 sys.path.append("/home/krizondr/school/past/stat_projekt/water_consumption/scripts")
-from input_data_parse.input_data_parser import WaterConsumption
 from scipy import stats
 import numpy as np
 import pandas as pd
 import matplotlib
 import matplotlib.pyplot as plt
 import seaborn as sns
+
+# Data load
 
 df = pd.read_csv('../../input_data/water_consumption_population_2022.csv', decimal=",")
 
@@ -18,12 +19,11 @@ population_variance = consumption_only.var().var()
 
 population_mean  = consumption_only.mean().mean()
 
-
-print("Population variance:")
+print("Variance:")
 print(population_variance)
 print("Standard deviation:")
 print(np.sqrt(population_variance))
-print("Population mean:")
+print("Mean:")
 print(population_mean)
 
 
