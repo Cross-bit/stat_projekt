@@ -222,7 +222,6 @@ Obr. 9: Q-Q plot pro *poissonovo rozdělení*
 
 Pro jistotu ještě prověříme *Poissonovo rozdělení*, které by (pokud by byl náš vzorek nedostatečný) mohlo naše data také vysvětlovat. Konkrétně bylo použito rozdělení s parametrem $\lambda = S_n$. Z *Q-Q plotu* je patrné, že naše hodnoty se s referenční přímkou neshodují téměř vůbec a tedy toto rozdělení můžeme vyloučit.
 
-Kód pro generování je TODO: cesta
 
 ### Komentář k modelu
 Z analýzy výše nám nejlépe vychází *Q-Q plot* pro *exponencionální distribuci* a *gamma distribuci*. Je dobré si však rozmyslet, zdali tento model skutečně dobře odpovídá našim datům. Exponencionální rozdělení typicky modeluje nezávislé časové intervaly, definující nějaký jev, který nastane v budoucnosti (čas před příchodem dalšího telefonního hovoru do call-centra, čas rozpadu atomu apod.). 
